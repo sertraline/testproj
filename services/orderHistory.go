@@ -28,7 +28,6 @@ func SaveOrderHistory(data *validators.OrderHistoryCreateRequest) (int, error) {
 	ho := data.HistoryOrder
 	cl := data.Client
 
-	fmt.Println(ho, cl)
 	params := []any{
 		cl.ClientName, cl.ExchangeName, cl.Label, cl.Pair,
 		ho.Side, ho.Type, ho.BaseQty, ho.Price, ho.AlgorithmNamePlaced,
@@ -83,6 +82,5 @@ func GetOrderHistory(clientName string, label string, pair string, exchangeName 
 	}
 	rows.Close()
 
-	fmt.Println("result", orders)
 	return orders, rows.Err()
 }
