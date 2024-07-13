@@ -11,7 +11,6 @@ import (
 )
 
 func SaveOrderHistory(data *validators.OrderHistoryCreateRequest) (int, error) {
-	// Я не нашел autoincrement в ClickHouse, поэтому я определяю id записи через Count.
 	query := `
 	INSERT INTO OrderHistory 
 		(
@@ -47,6 +46,7 @@ func GetOrderHistory(clientName string, label string, pair string, exchangeName 
 	// пробелы в имени клиента можно обозначать через +
 	clientName = strings.ReplaceAll(clientName, "+", " ")
 
+	// поиск по таблице с указанными параметрами, используется кеширование
 	query := `
 		SELECT * FROM OrderHistory WHERE 
 		multiSearchAnyCaseInsensitiveUTF8(client_name, [$1]) 
@@ -70,6 +70,7 @@ func GetOrderHistory(clientName string, label string, pair string, exchangeName 
 		return []*models.HistoryOrder{}, err
 	}
 
+	// заполняем слайс полученными данными
 	orders := make([]*models.HistoryOrder, 0)
 	for rows.Next() {
 		var ho = &models.HistoryOrder{}

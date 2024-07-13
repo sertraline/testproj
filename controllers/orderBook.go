@@ -11,27 +11,32 @@ import (
 )
 
 func SaveOrderBook(w http.ResponseWriter, r *http.Request) {
+	// валидация и сериализация запроса (используется в chi фреймворке)
 	data := &validators.OrderCreateRequest{}
 	if err := render.Bind(r, data); err != nil {
 		render.Render(w, r, errResp.ErrInvalidRequest(err))
 		return
 	}
 
+	// бизнес-логика
 	userData, err := services.SaveOrderBook(data)
 	if err != nil {
 		render.Render(w, r, errResp.ErrInvalidRequest(err))
 	}
 
+	// chi render сериализует данные в JSON
 	render.JSON(w, r, userData)
 }
 
 func GetOrderBook(w http.ResponseWriter, r *http.Request) {
+	// URLParam получает именованные URL запросы
 	ename := chi.URLParam(r, "exchange_name")
 	if ename == "" {
 		render.Render(w, r, errResp.ErrNotFound)
 		return
 	}
 
+	// Query получает URL параметры
 	pair := r.URL.Query().Get("pair")
 	if pair == "" {
 		render.Render(w, r, errResp.ErrNotFound)

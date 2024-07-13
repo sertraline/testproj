@@ -51,6 +51,7 @@ func GetConn() (clickhouse.Conn, error) {
 	return conn, err
 }
 
+// метод взят из clickhouse/examples
 func AsyncInsert(query string, params ...any) error {
 	conn, err := GetConn()
 	if err != nil {
@@ -86,9 +87,11 @@ func InitDatabase() error {
 	}
 
 	fmt.Println("Initializing tables")
+	// создание OrderBook
 	if err := AsyncInsert(models.InitOrderBook); err != nil {
 		return err
 	}
+	// создание OrderHistory
 	if err := AsyncInsert(models.InitOrderHistory); err != nil {
 		return err
 	}

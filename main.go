@@ -18,13 +18,18 @@ func main() {
 	r := chi.NewRouter()
 
 	// стандартные мидлвари для chi роутера
+
+	// присваивает уникальный идентификатор каждому запросу
 	r.Use(middleware.RequestID)
+	// логгирует каждый запрос
 	r.Use(middleware.Logger)
+	// позволяет дочерним тредам паниковать и восстанавливать свою работу
 	r.Use(middleware.Recoverer)
+	// позволяет использовать именованные URL параметры типа {name}
 	r.Use(middleware.URLFormat)
 
 	r.Use(render.SetContentType(render.ContentTypeJSON))
-
+	// CORS настроен на любые источники
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"https://*", "http://*"},
 		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },

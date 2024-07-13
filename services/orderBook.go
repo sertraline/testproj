@@ -14,7 +14,6 @@ import (
 
 func SaveOrderBook(data *validators.OrderCreateRequest) (int, error) {
 	// Я не нашел autoincrement в ClickHouse, поэтому я определяю id записи через Count.
-	//
 
 	query := `
 	INSERT INTO OrderBook (id, exchange, pair, asks, bids) SELECT
@@ -60,6 +59,7 @@ func SaveOrderBook(data *validators.OrderCreateRequest) (int, error) {
 }
 
 func GetOrderBook(exchangeName string, pair string) (models.OrderBook, error) {
+	// поиск по таблице с указанным exchange & pair, используется кеширование
 	query := `
 		SELECT * FROM OrderBook WHERE 
 		multiSearchAnyCaseInsensitiveUTF8(exchange, [$1]) 
@@ -78,6 +78,7 @@ func GetOrderBook(exchangeName string, pair string) (models.OrderBook, error) {
 	orders := models.OrderBook{}
 	if err := conn.QueryRow(context.Background(), query, exchangeName, pair).ScanStruct(&orders); err != nil {
 		fmt.Println(err)
+		// обработка пустого массива
 		if errors.Is(err, sql.ErrNoRows) {
 			orders.Id = -1
 			return orders, err
