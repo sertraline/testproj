@@ -42,7 +42,7 @@ go test -timeout 30s -v github.com/sertraline/testproj/tests
   ```bash
   curl "http://localhost:3333/order_book/ig?pair=USD/JPY
 
-  {"Id":5,"Exchange":"ig.com","Pair":"USD/JPY","Asks":[{"price":1.5,"base_qty":1000},{"price":2,"base_qty":200}],"Bids":[{"price":1.5,"base_qty":20000}]}
+  {"Id":5,"Exchange":"ig","Pair":"USD/JPY","Asks":[{"price":1.5,"base_qty":1000},{"price":2,"base_qty":200}],"Bids":[{"price":1.5,"base_qty":20000}]}
   ```
 
 
@@ -63,12 +63,12 @@ go test -timeout 30s -v github.com/sertraline/testproj/tests
         commission_quote_qty,
         time_placed
       },
-      "client":
-        {
-          exchange_name,
-          label,
-          pair
-        } 
+    "client":
+      {
+        exchange_name,
+        label,
+        pair
+      } 
     }
   ```
   Эндпоинт: `POST /clients/{client_name}`  
