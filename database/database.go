@@ -11,7 +11,6 @@ import (
 func GetConn() (clickhouse.Conn, error) {
 	// бд "orders" генерируется в fs/volumes/clickhouse/docker-entrypoint-inidb.d
 	addr := "127.0.0.1:9000"
-	//dialCount := 0
 	conn, err := clickhouse.Open(&clickhouse.Options{
 		Addr: []string{addr},
 		Auth: clickhouse.Auth{
@@ -20,24 +19,19 @@ func GetConn() (clickhouse.Conn, error) {
 			// без пароля
 			Password: "",
 		},
-		// DialContext: func(ctx context.Context, addr string) (net.Conn, error) {
-		// 	dialCount++
-		// 	var d net.Dialer
-		// 	return d.DialContext(ctx, "tcp", addr)
-		// },
 		Debug: false,
 		Settings: clickhouse.Settings{
 			"max_execution_time": 60,
 		},
-		Compression: &clickhouse.Compression{
-			Method: clickhouse.CompressionLZ4,
-		},
-		DialTimeout:          time.Second * 30,
-		MaxOpenConns:         100,
-		MaxIdleConns:         5,
-		ConnMaxLifetime:      time.Duration(10) * time.Minute,
+		// Compression: &clickhouse.Compression{
+		// 	Method: clickhouse.CompressionLZ4,
+		// },
+		DialTimeout:          time.Second * 10,
+		MaxOpenConns:         105,
+		MaxIdleConns:         100,
+		ConnMaxLifetime:      time.Duration(60) * time.Minute,
 		ConnOpenStrategy:     clickhouse.ConnOpenInOrder,
-		BlockBufferSize:      10,
+		BlockBufferSize:      18,
 		MaxCompressionBuffer: 10240,
 		ClientInfo: clickhouse.ClientInfo{
 			Products: []struct {
