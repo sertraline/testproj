@@ -2,8 +2,6 @@ package database
 
 import (
 	"context"
-	"log"
-	"net"
 	"time"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
@@ -13,8 +11,7 @@ import (
 func GetConn() (clickhouse.Conn, error) {
 	// бд "orders" генерируется в fs/volumes/clickhouse/docker-entrypoint-inidb.d
 	addr := "127.0.0.1:9000"
-	log.Printf("Connect %s", addr)
-	dialCount := 0
+	//dialCount := 0
 	conn, err := clickhouse.Open(&clickhouse.Options{
 		Addr: []string{addr},
 		Auth: clickhouse.Auth{
@@ -23,12 +20,12 @@ func GetConn() (clickhouse.Conn, error) {
 			// без пароля
 			Password: "",
 		},
-		DialContext: func(ctx context.Context, addr string) (net.Conn, error) {
-			dialCount++
-			var d net.Dialer
-			return d.DialContext(ctx, "tcp", addr)
-		},
-		Debug: true,
+		// DialContext: func(ctx context.Context, addr string) (net.Conn, error) {
+		// 	dialCount++
+		// 	var d net.Dialer
+		// 	return d.DialContext(ctx, "tcp", addr)
+		// },
+		Debug: false,
 		Settings: clickhouse.Settings{
 			"max_execution_time": 60,
 		},
@@ -55,11 +52,7 @@ func GetConn() (clickhouse.Conn, error) {
 	if err != nil {
 		return nil, err
 	}
-	// проверка подключения
-	err = conn.Ping(context.Background())
-	if err != nil {
-		return nil, err
-	}
+
 	return conn, err
 }
 
@@ -82,6 +75,21 @@ func AsyncInsert(query string, params ...any) error {
 }
 
 func InitDatabase() error {
+	conn, err := GetConn()
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		conn.Close()
+	}()
+
+	// проверка подключения
+	err = conn.Ping(context.Background())
+	if err != nil {
+		return err
+	}
+
 	if err := AsyncInsert(models.InitOrderBook); err != nil {
 		return err
 	}
