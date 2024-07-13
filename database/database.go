@@ -36,7 +36,7 @@ func GetConn() (clickhouse.Conn, error) {
 			Method: clickhouse.CompressionLZ4,
 		},
 		DialTimeout:          time.Second * 30,
-		MaxOpenConns:         5,
+		MaxOpenConns:         100,
 		MaxIdleConns:         5,
 		ConnMaxLifetime:      time.Duration(10) * time.Minute,
 		ConnOpenStrategy:     clickhouse.ConnOpenInOrder,

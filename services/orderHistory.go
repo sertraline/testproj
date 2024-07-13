@@ -61,6 +61,10 @@ func GetOrderHistory(clientName string, label string, pair string, exchangeName 
 		panic("Failed to initialize database connection")
 	}
 
+	defer func() {
+		conn.Close()
+	}()
+
 	rows, err := conn.Query(context.Background(), query, clientName, exchangeName, label, pair)
 	if err != nil {
 		fmt.Println(err)

@@ -71,6 +71,10 @@ func GetOrderBook(exchangeName string, pair string) (models.OrderBook, error) {
 		panic("Failed to initialize database connection")
 	}
 
+	defer func() {
+		conn.Close()
+	}()
+
 	orders := models.OrderBook{}
 	if err := conn.QueryRow(context.Background(), query, exchangeName, pair).ScanStruct(&orders); err != nil {
 		fmt.Println(err)
