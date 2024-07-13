@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
@@ -81,9 +82,10 @@ func InitDatabase() error {
 	// проверка подключения
 	err = conn.Ping(context.Background())
 	if err != nil {
-		return err
+		panic(err)
 	}
 
+	fmt.Println("Initializing tables")
 	if err := AsyncInsert(models.InitOrderBook); err != nil {
 		return err
 	}

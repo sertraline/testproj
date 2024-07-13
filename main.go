@@ -49,36 +49,6 @@ func main() {
 		})
 	})
 
-	// conn, err := db.GetConn()
-	// if err != nil {
-	// 	panic("Failed to initialize database connection")
-	// }
-
-	// orders := models.OrderBook{}
-	// if err := conn.QueryRow(context.Background(), "SELECT * FROM OrderBook").ScanStruct(&orders); err != nil {
-	// 	fmt.Println(err)
-	// 	panic("Failed to scan, %e")
-	// }
-	// fmt.Println("result", orders)
-
-	// his := models.HistoryOrder{}
-	// if err := conn.QueryRow(context.Background(), "SELECT * FROM OrderHistory").ScanStruct(&his); err != nil {
-	// 	fmt.Println(err)
-	// 	panic("Failed to scan, %e")
-	// }
-	// fmt.Println("result", his)
-
-	// client := models.Client{
-	// 	ClientName:   his.ClientName,
-	// 	ExchangeName: his.ExchangeName,
-	// 	Label:        his.Label,
-	// 	Pair:         his.Pair,
-	// }
-	// if err := conn.QueryRow(context.Background(), "SELECT client_name, exchange_name, label, pair FROM OrderHistory").ScanStruct(&client); err != nil {
-	// 	fmt.Println(err)
-	// 	panic("Failed to scan, %e")
-	// }
-	// fmt.Println("result", client)
 	addr := ":3333"
 	fmt.Printf("Starting server on %v\n", addr)
 	http.ListenAndServe(addr, r)

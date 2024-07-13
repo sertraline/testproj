@@ -53,7 +53,7 @@ func GetOrderHistory(clientName string, label string, pair string, exchangeName 
 		multiSearchAnyCaseInsensitiveUTF8(client_name, [$1]) 
 		AND multiSearchAnyCaseInsensitiveUTF8(exchange_name, [$2])
 		AND multiSearchAnyCaseInsensitiveUTF8(label, [$3])
-		AND multiSearchAnyCaseInsensitiveUTF8(pair, [$4]);
+		AND multiSearchAnyCaseInsensitiveUTF8(pair, [$4]) SETTINGS use_query_cache = true;
 	`
 
 	conn, err := db.GetConn()

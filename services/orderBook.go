@@ -63,7 +63,7 @@ func GetOrderBook(exchangeName string, pair string) (models.OrderBook, error) {
 	query := `
 		SELECT * FROM OrderBook WHERE 
 		multiSearchAnyCaseInsensitiveUTF8(exchange, [$1]) 
-		AND multiSearchAnyCaseInsensitiveUTF8(pair, [$2]);
+		AND multiSearchAnyCaseInsensitiveUTF8(pair, [$2]) SETTINGS use_query_cache = true;;
 	`
 
 	conn, err := db.GetConn()
